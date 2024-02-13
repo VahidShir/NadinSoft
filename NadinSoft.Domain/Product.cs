@@ -10,7 +10,7 @@ public class Product
 
     public string Name { get; private set; }
 
-    public DateOnly? ProduceDate { get; private set; }
+    public DateOnly ProduceDate { get; private set; }
 
     public string ManufacturePhone { get; private set; }
 
