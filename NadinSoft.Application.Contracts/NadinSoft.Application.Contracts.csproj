@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NadinSoft.Domain.Shared\NadinSoft.Domain.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

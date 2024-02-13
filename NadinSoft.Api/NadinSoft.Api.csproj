@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NadinSoft.Application.Contracts\NadinSoft.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Infrastructures\NadinSoft.EntityFrameworkCore\NadinSoft.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\NadinSoft.Application\NadinSoft.Application.csproj" />
   </ItemGroup>
 
 </Project>

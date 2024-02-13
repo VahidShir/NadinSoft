@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="libphonenumber-csharp" Version="8.13.30" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NadinSoft.Domain.Shared\NadinSoft.Domain.Shared.csproj" />
   </ItemGroup>
 
