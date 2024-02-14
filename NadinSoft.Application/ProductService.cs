@@ -18,7 +18,7 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<ProductDto> CreateAsync(Guid createdBy, ProductCreateDto input)
+    public async Task<ProductDto> CreateAsync(string createdBy, ProductCreateDto input)
     {
         Product product = await _productManager.CreateProduct(
             createdBy: createdBy,

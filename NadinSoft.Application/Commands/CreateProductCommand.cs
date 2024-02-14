@@ -6,12 +6,13 @@ namespace NadinSoft.Application.Commands;
 
 public class CreateProductCommand : IRequest<ProductDto>
 {
-    public Guid CreatedBy { get; set; }
+    public string CreatedBy { get; set; }
 
     public ProductCreateDto Product { get; set; }
 
-    public CreateProductCommand(Guid CreatedBy, ProductCreateDto product)
+    public CreateProductCommand(string createdBy, ProductCreateDto product)
     {
         Product = product;
+        CreatedBy = createdBy;
     }
 }

@@ -73,7 +73,7 @@ public class AccountController : ControllerBase
         }
 
         var user = await _userManager.FindByNameAsync(request.UserName);
-
+        
         if (user is null)
         {
             return Unauthorized(new SignInResponseDto

@@ -27,4 +27,6 @@ public record ProductDto
 
     [Required]
     public bool IsAvailable { get; set; }
+
+    public string CreatedBy { get; set; }
 }

@@ -39,7 +39,8 @@ public class Program
                 In = ParameterLocation.Header,
                 Description = "Add bearer token in the field",
                 Name = "Authhentication",
-                Type = SecuritySchemeType.ApiKey
+                Scheme = "bearer",
+                Type = SecuritySchemeType.Http
             });
             x.AddSecurityRequirement(new OpenApiSecurityRequirement {
 
@@ -49,7 +50,7 @@ public class Program
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                            Id = JwtBearerDefaults.AuthenticationScheme
                         }
                     },
                     new string[]{ }
@@ -69,7 +70,7 @@ public class Program
 
 
         var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
-        var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);
+        var key = Encoding.UTF8.GetBytes(apiSettings.SecretKey);
 
         services.AddAuthentication(options =>
         {
@@ -88,8 +89,7 @@ public class Program
                     ValidateAudience = true,
                     ValidateIssuer = true,
                     ValidAudience = apiSettings.ValidAudience,
-                    ValidIssuer = apiSettings.ValidIssuer,
-                    ClockSkew = TimeSpan.Zero
+                    ValidIssuer = apiSettings.ValidIssuer
                 };
             });
 

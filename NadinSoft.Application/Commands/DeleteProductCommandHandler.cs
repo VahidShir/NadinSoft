@@ -15,9 +15,14 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
 
     public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        bool exists = await _productsRepository.AnyAsync(x => x.Id == request.Id);
+        var product = await _productsRepository.GetAsync(request.Id);
 
-        if (!exists)
+        if(product.CreatedBy != request.UserName)
+        {
+            throw new NadinSoftForbiddenException("Operation is forbidden.");
+        }
+
+        if (product is null)
         {
             throw new NadinSoftBusinessException("THe product you want to delete doesn't exists.");
         }

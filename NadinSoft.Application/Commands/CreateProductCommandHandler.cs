@@ -13,7 +13,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     private readonly IProductsRepository _productsRepository;
     private readonly IMapper _mapper;
 
-    public CreateProductCommandHandler(ProductManager productManager, IProductsRepository productsRepository, IMapper mapper)
+    public CreateProductCommandHandler(ProductManager productManager, IProductsRepository productsRepository,
+        IMapper mapper)
     {
         _productManager = productManager;
         _productsRepository = productsRepository;

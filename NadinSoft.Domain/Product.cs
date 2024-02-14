@@ -8,7 +8,10 @@ public class Product
 {
     public long Id { get; protected set; }
 
-    public Guid CreatedBy { get; private set; }
+    /// <summary>
+    /// UserName of the person who created the product
+    /// </summary>
+    public string CreatedBy { get; private set; }
 
     public string Name { get; private set; }
 
@@ -22,17 +25,19 @@ public class Product
 
     private Product() { }
 
-    internal Product(Guid createdBy, string name, DateOnly produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
+    internal Product(string createdBy, string name, DateOnly produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
     {
         
-        ArgumentNullException.ThrowIfNull(manufacturePhone);
-        ArgumentNullException.ThrowIfNull(manufactureEmail);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(manufacturePhone);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(manufactureEmail);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(createdBy);
 
         ValidateName(name);
         ValidateEmail(manufactureEmail);
         ValidatePhone(manufacturePhone);
         ValidateProduceDate(produceDate);
 
+        CreatedBy = createdBy;
         Name = name;
         ProduceDate = produceDate;
         ManufacturePhone = manufacturePhone;

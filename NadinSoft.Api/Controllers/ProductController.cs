@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -9,6 +11,7 @@ using NadinSoft.Application.Queries;
 using NadinSoft.Domain;
 
 using System.Net;
+using System.Security.Claims;
 
 namespace NadinSoft.Api.Controllers;
 
@@ -17,10 +20,13 @@ namespace NadinSoft.Api.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly UserManager<IdentityUser> _userManager;
+    private Guid UserId;
 
-    public ProductController(IMediator mediator)
+    public ProductController(IMediator mediator, UserManager<IdentityUser> userManager)
     {
         _mediator = mediator;
+        _userManager = userManager;
     }
 
     [HttpGet]
@@ -65,6 +71,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(ProductCreateDto input)
     {
         if (!ModelState.IsValid)
@@ -72,7 +79,7 @@ public class ProductController : ControllerBase
 
         try
         {
-            var product = await _mediator.Send(new CreateProductCommand(CreatedBy:Guid.NewGuid() ,input));
+            var product = await _mediator.Send(new CreateProductCommand(createdBy: User.Identity.Name, input));
 
             return CreatedAtAction(actionName: nameof(Get), routeValues: new { id = product.Id }, product);
         }
@@ -87,13 +94,18 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(long id)
     {
         try
         {
-            await _mediator.Send(new DeleteProductCommand(id));
+            await _mediator.Send(new DeleteProductCommand(userName: User.Identity.Name, id));
 
             return Ok();
+        }
+        catch (NadinSoftForbiddenException e)
+        {
+            return Unauthorized(e.Message);
         }
         catch (Exception e) when (e is NadinSoftBusinessException || e is ArgumentException)
         {

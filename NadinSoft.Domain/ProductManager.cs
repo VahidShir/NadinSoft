@@ -9,7 +9,7 @@ public class ProductManager
         _productsRepository = productsRepository;
     }
 
-    public async Task<Product> CreateProduct(Guid createdBy, string name, DateOnly produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
+    public async Task<Product> CreateProduct(string createdBy, string name, DateOnly produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
     {
         bool alreadyExists = await _productsRepository.AnyAsync(x => x.ProduceDate == produceDate || x.ManufactureEmail == manufactureEmail);
 
