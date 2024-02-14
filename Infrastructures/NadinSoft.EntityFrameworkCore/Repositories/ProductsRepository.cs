@@ -74,8 +74,14 @@ public class ProductsRepository : IProductsRepository
         return updatedProduct.Entity;
     }
 
+    public async Task<bool> AnyAsync(Expression<Func<Product, bool>> filter)
+    {
+        return await _dbContext.Products.AnyAsync(filter);
+    }
+
     public async Task SaveAsync()
     {
         await _dbContext.SaveChangesAsync();
     }
+
 }

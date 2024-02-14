@@ -2,7 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
+using NadinSoft.Application;
+using NadinSoft.Application.Contracts;
+using NadinSoft.Domain;
 using NadinSoft.EntityFrameworkCore;
+using NadinSoft.EntityFrameworkCore.Repositories;
 
 using System;
 
@@ -25,6 +29,12 @@ public class Program
         //todo: docker sql server
         services.AddDbContext<NadinSoftDbContext>(options =>
                                     options.UseSqlServer(configuration.GetConnectionString("Default")));
+
+        services.AddAutoMapper(typeof(ProductAutoMapperProfile));
+
+        services.AddScoped<IProductsRepository, ProductsRepository>();
+        services.AddTransient<ProductManager>();
+        services.AddTransient<IProductService, ProductService>();
 
         var app = builder.Build();
 
