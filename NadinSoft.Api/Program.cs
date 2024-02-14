@@ -22,6 +22,9 @@ public class Program
 
         // Add services to the container.
         services.AddControllers();
+
+        builder.Services.AddDateOnlyTimeOnlyStringConverters();
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
