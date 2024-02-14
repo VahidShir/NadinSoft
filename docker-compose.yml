@@ -1,0 +1,29 @@
+version: '3.4'
+networks:
+    myAppNetwork:
+ 
+services:
+    SqlServerDb:
+        container_name: SqlServerContainer
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+            - 8002:1433
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=1qaz!QAZ
+    nadinsoft.api:
+        container_name: WebApiContainer
+        image: ${DOCKER_REGISTRY-}nadinsoftapi
+        ports:
+            - 8001:80 
+        build:
+          context: .
+          dockerfile: NadinSoft.Api/Dockerfile
+        depends_on:
+            - SqlServerDb
+# services:
+#   nadinsoft.api:
+#     image: ${DOCKER_REGISTRY-}nadinsoftapi
+#     build:
+#       context: .
+#       dockerfile: NadinSoft.Api/Dockerfile
