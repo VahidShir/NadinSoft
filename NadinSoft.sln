@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NadinSoft.Api.Tests", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NadinSoft.Application.Tests", "Tests\NadinSoft.Application.Tests\NadinSoft.Application.Tests.csproj", "{74C20A03-2EA4-446B-B6B4-51120C7BFF35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NadinSoft.Domain.Tests", "NadinSoft.Domain.Tests\NadinSoft.Domain.Tests.csproj", "{D9282D70-CD86-46CE-ABFC-87A6CD900E79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NadinSoft.Domain.Tests", "Tests\NadinSoft.Domain.Tests\NadinSoft.Domain.Tests.csproj", "{D9282D70-CD86-46CE-ABFC-87A6CD900E79}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{65011F3D-378D-49CC-975E-94BF1A6F9A85}"
 EndProject
