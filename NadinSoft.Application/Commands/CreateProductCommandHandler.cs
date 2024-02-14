@@ -23,6 +23,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         Product product = await _productManager.CreateProduct(
+            createdBy: request.CreatedBy,
             name: request.Product.Name,
             produceDate: request.Product.ProduceDate,
             manufacturePhone: request.Product.ManufacturePhone,

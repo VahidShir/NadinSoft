@@ -1,19 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 using NadinSoft.Domain;
 
 namespace NadinSoft.EntityFrameworkCore;
 
-public class NadinSoftDbContext : DbContext
+public class NadinSoftDbContext : IdentityDbContext
 {
     public NadinSoftDbContext(DbContextOptions options) : base(options)
     {
-
+        var test = new IdentityUser();
+        test.
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Product>()
                 .Property(b => b.Id)
                 .ValueGeneratedOnAdd();

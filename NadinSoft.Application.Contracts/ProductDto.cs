@@ -15,10 +15,14 @@ public record ProductDto
 
     [Required]
     [MaxLength(15)]
+    [RegularExpression("^0[0-9]{2,}[0-9]{7,}$")]
+    //Regular expression for Iran Landline phones
+    //https://www.datisnetwork.com/phone-number-regex.html
     public string ManufacturePhone { get; set; }
 
     [Required]
     [MaxLength(100)]
+    [EmailAddress]
     public string ManufactureEmail { get; set; }
 
     [Required]

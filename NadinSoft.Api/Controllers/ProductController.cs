@@ -72,7 +72,7 @@ public class ProductController : ControllerBase
 
         try
         {
-            var product = await _mediator.Send(new CreateProductCommand(input));
+            var product = await _mediator.Send(new CreateProductCommand(CreatedBy:Guid.NewGuid() ,input));
 
             return CreatedAtAction(actionName: nameof(Get), routeValues: new { id = product.Id }, product);
         }

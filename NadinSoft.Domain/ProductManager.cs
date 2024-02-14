@@ -9,7 +9,7 @@ public class ProductManager
         _productsRepository = productsRepository;
     }
 
-    public async Task<Product> CreateProduct(string name, DateOnly produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
+    public async Task<Product> CreateProduct(Guid createdBy, string name, DateOnly produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
     {
         bool alreadyExists = await _productsRepository.AnyAsync(x => x.ProduceDate == produceDate || x.ManufactureEmail == manufactureEmail);
 
@@ -18,7 +18,7 @@ public class ProductManager
             throw new NadinSoftBusinessException("A product with either the same email or produce date already exists.");
         }
 
-        return new Product(name: name, produceDate: produceDate, manufacturePhone: manufacturePhone,
+        return new Product(createdBy: createdBy, name: name, produceDate: produceDate, manufacturePhone: manufacturePhone,
             manufactureEmail: manufactureEmail, isAvailable: isAvailable);
     }
 }

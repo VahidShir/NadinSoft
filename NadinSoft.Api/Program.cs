@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using NadinSoft.Application;
@@ -30,6 +31,10 @@ public class Program
         //todo: docker sql server
         services.AddDbContext<NadinSoftDbContext>(options =>
                                     options.UseSqlServer(configuration.GetConnectionString("Default")));
+
+        services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<NadinSoftDbContext>();
 
         services.AddAutoMapper(typeof(ProductAutoMapperProfile));
 
