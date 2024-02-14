@@ -20,7 +20,16 @@ public class GetProductsListQueryHandler : IRequestHandler<GetProductsListQuery,
 
     public async Task<IEnumerable<ProductDto>> Handle(GetProductsListQuery request, CancellationToken cancellationToken)
     {
-        var products = await _productsRepository.GetAllAsync();
+        IEnumerable<Product> products = null;
+
+        if (string.IsNullOrWhiteSpace(request.UserName))
+        {
+            products = await _productsRepository.GetAllAsync();
+        }
+        else
+        {
+            products = await _productsRepository.GetListAsync(x => x.CreatedBy == request.UserName);
+        }
 
         if (products?.Count() > 0)
         {

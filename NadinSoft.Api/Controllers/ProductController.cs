@@ -30,11 +30,11 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(string? userName)
     {
         try
         {
-            var products = await _mediator.Send(new GetProductsListQuery());
+            var products = await _mediator.Send(new GetProductsListQuery(userName));
 
             return Ok(products);
         }
