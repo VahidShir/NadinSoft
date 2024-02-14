@@ -1,6 +1,8 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 using NadinSoft.Application;
 using NadinSoft.Application.Commands;
@@ -8,6 +10,8 @@ using NadinSoft.Application.Contracts;
 using NadinSoft.Domain;
 using NadinSoft.EntityFrameworkCore;
 using NadinSoft.EntityFrameworkCore.Repositories;
+
+using System.Text;
 
 namespace NadinSoft.Api;
 
@@ -28,6 +32,8 @@ public class Program
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
+        services.Configure<ApiSettings>(configuration.GetSection("ApiSettings"));
+
         //todo: docker sql server
         services.AddDbContext<NadinSoftDbContext>(options =>
                                     options.UseSqlServer(configuration.GetConnectionString("Default")));
@@ -35,6 +41,32 @@ public class Program
         services.AddIdentity<IdentityUser, IdentityRole>()
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<NadinSoftDbContext>();
+
+
+        var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
+        var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidAudience = apiSettings.ValidAudience,
+                    ValidIssuer = apiSettings.ValidIssuer,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
         services.AddAutoMapper(typeof(ProductAutoMapperProfile));
 
@@ -57,6 +89,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
 

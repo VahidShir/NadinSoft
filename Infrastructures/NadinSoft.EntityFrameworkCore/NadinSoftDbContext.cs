@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using NadinSoft.Domain;
@@ -10,8 +9,7 @@ public class NadinSoftDbContext : IdentityDbContext
 {
     public NadinSoftDbContext(DbContextOptions options) : base(options)
     {
-        var test = new IdentityUser();
-        test.
+        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
