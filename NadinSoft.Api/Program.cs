@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 using NadinSoft.Application;
 using NadinSoft.Application.Commands;
@@ -30,7 +31,31 @@ public class Program
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(x =>
+        {
+            x.SwaggerDoc("v1", new OpenApiInfo { Title = "Nadin Soft", Version = "v1" });
+            x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Add bearer token in the field",
+                Name = "Authhentication",
+                Type = SecuritySchemeType.ApiKey
+            });
+            x.AddSecurityRequirement(new OpenApiSecurityRequirement {
+
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{ }
+                }
+            });
+        });
 
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings"));
 
