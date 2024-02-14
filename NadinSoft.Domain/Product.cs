@@ -77,6 +77,6 @@ public class Product
         bool isValid = produceDate < DateOnly.FromDateTime(DateTime.UtcNow);
 
         if (!isValid)
-            throw new ArgumentException("Product creation date is invalid", paramName: nameof(ManufacturePhone));
+            throw new NadinSoftBusinessException("Product creation date is invalid.");
     }
 }

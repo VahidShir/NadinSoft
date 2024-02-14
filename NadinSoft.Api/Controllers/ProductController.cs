@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
+using NadinSoft.Application.Commands;
 using NadinSoft.Application.Contracts;
+using NadinSoft.Application.Queries;
 using NadinSoft.Domain;
 
 using System.Net;
@@ -12,11 +16,11 @@ namespace NadinSoft.Api.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly IProductService _productService;
+    private readonly IMediator _mediator;
 
-    public ProductController(IProductService productService)
+    public ProductController(IMediator mediator)
     {
-        _productService = productService;
+        _mediator = mediator;
     }
 
     [HttpGet]
@@ -24,17 +28,17 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _mediator.Send(new GetProductsListQuery());
 
             return Ok(products);
         }
-        catch (NadinSoftBusinessException e)
+        catch (Exception e) when (e is NadinSoftBusinessException || e is ArgumentException)
         {
             return BadRequest(e.Message);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
+            return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
         }
     }
 
@@ -43,20 +47,20 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var product = await _productService.GetAsync(id);
+            var product = await _mediator.Send(new GetProductByIdQuery());
 
             if (product is null)
                 return NotFound();
 
             return Ok(product);
         }
-        catch (NadinSoftBusinessException e)
+        catch (Exception e) when (e is NadinSoftBusinessException || e is ArgumentException)
         {
             return BadRequest(e.Message);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
+            return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
         }
     }
 
@@ -68,17 +72,17 @@ public class ProductController : ControllerBase
 
         try
         {
-            var product = await _productService.CreateAsync(input);
+            var product = await _mediator.Send(new CreateProductCommand(input));
 
             return CreatedAtAction(actionName: nameof(Get), routeValues: new { id = product.Id }, product);
         }
-        catch (NadinSoftBusinessException e)
+        catch (Exception e) when (e is NadinSoftBusinessException || e is ArgumentException)
         {
             return BadRequest(e.Message);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
+            return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
         }
     }
 
@@ -87,17 +91,17 @@ public class ProductController : ControllerBase
     {
         try
         {
-            await _productService.DeleteAsync(id);
+            await _mediator.Send(new DeleteProductCommand(id));
 
             return Ok();
         }
-        catch (NadinSoftBusinessException e)
+        catch (Exception e) when (e is NadinSoftBusinessException || e is ArgumentException)
         {
             return BadRequest(e.Message);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
+            return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
         }
     }
 }

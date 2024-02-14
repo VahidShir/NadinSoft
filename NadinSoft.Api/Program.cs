@@ -1,14 +1,12 @@
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 using NadinSoft.Application;
+using NadinSoft.Application.Commands;
 using NadinSoft.Application.Contracts;
 using NadinSoft.Domain;
 using NadinSoft.EntityFrameworkCore;
 using NadinSoft.EntityFrameworkCore.Repositories;
-
-using System;
 
 namespace NadinSoft.Api;
 
@@ -34,6 +32,8 @@ public class Program
                                     options.UseSqlServer(configuration.GetConnectionString("Default")));
 
         services.AddAutoMapper(typeof(ProductAutoMapperProfile));
+
+        builder.Services.AddMediatR(cf => cf.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly));
 
         services.AddScoped<IProductsRepository, ProductsRepository>();
         services.AddTransient<ProductManager>();
